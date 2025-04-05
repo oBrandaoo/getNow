@@ -3,39 +3,28 @@ import { useNavigate } from 'react-router-dom';
 
 function Home() {
     const navigate = useNavigate();
-    const carouselRef = useRef(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    const images = [
-        'https://picsum.photos/id/1018/800/400',
-        'https://picsum.photos/id/1015/800/400',
-        'https://picsum.photos/id/1016/800/400',
-        'https://picsum.photos/id/1019/800/400',
-        'https://picsum.photos/id/1020/800/400',
-    ];
+    const [metrics, setMetrics] = useState({
+        saldo: 12500.75,
+        produtosEstoque: 342,
+        valorFaturado: 58420.90,
+        lucro: 18750.30,
+        clientesAtivos: 124,
+        pedidosPendentes: 17
+    });
 
     const navItems = [
         { name: 'Produtos', path: '/products' },
         { name: 'Serviços', path: '/services' },
-        { name: 'Sobre', path: '/about' },
-        { name: 'Contato', path: '/contact' },
+        { name: 'Relatórios', path: '/reports' },
+        { name: 'Configurações', path: '/settings' },
     ];
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const newIndex = (currentIndex + 1) % images.length;
-            setCurrentIndex(newIndex);
-        }, 3000);
-
-        return () => clearInterval(interval);
-    }, [currentIndex, images.length]);
-
-    useEffect(() => {
-        if (carouselRef.current) {
-            carouselRef.current.style.scrollBehavior = 'smooth';
-            carouselRef.current.scrollLeft = currentIndex * carouselRef.current.offsetWidth;
-        }
-    }, [currentIndex]);
+    const recentActivities = [
+        { id: 1, action: 'Pedido #4587 concluído', time: '10 min atrás', value: 'R$ 1.250,00' },
+        { id: 2, action: 'Novo cliente cadastrado', time: '25 min atrás' },
+        { id: 3, action: 'Produto esgotado: Smartphone X', time: '1 hora atrás' },
+        { id: 4, action: 'Pagamento recebido - Pedido #4582', time: '2 horas atrás', value: 'R$ 890,00' },
+    ];
 
     const handleLogout = () => {
         navigate('/login');
@@ -45,20 +34,12 @@ function Home() {
         navigate(path);
     };
 
-    const goToPrev = () => {
-        setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-    };
-
-    const goToNext = () => {
-        setCurrentIndex((prev) => (prev + 1) % images.length);
-    };
-
     return (
         <div style={styles.container}>
             {/* Navbar */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>GetNow</h1>
+                    <h1 style={styles.logo}>(Logo) Dashboard</h1>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
@@ -71,61 +52,83 @@ function Home() {
                         ))}
                     </div>
                 </div>
-                <button style={styles.logoutButton} onClick={handleLogout}>Sair</button>
+                <button style={styles.logoutButton} onClick={handleLogout}>Login</button>
             </div>
 
             {/* Conteúdo Principal */}
             <main style={styles.mainContent}>
-                {/* Carrossel */}
-                <div style={styles.carouselWrapper}>
-                    <button
-                        style={{ ...styles.carouselArrow, left: '20px' }}
-                        onClick={goToPrev}
-                    >
-                        <span style={styles.arrowIcon}>&lt;</span>
-                    </button>
-
-                    <div style={styles.carouselContainer} ref={carouselRef}>
-                        {images.map((src, index) => (
-                            <div key={index} style={styles.carouselSlide}>
-                                <img src={src} alt={`Imagem ${index}`} style={styles.image} />
+                {/* Seção de Métricas */}
+                <section style={styles.metricsSection}>
+                    <h2 style={styles.sectionTitle}>Visão Geral</h2>
+                    <div style={styles.metricsGrid}>
+                        {/* Cartão de Saldo */}
+                        <div style={styles.metricCard}>
+                            <div style={styles.metricIcon} className="money-icon">💰</div>
+                            <div style={styles.metricInfo}>
+                                <h3 style={styles.metricLabel}>Saldo Disponível</h3>
+                                <p style={styles.metricValue}>
+                                    {metrics.saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                </p>
                             </div>
-                        ))}
+                        </div>
+
+                        {/* Cartão de Estoque */}
+                        <div style={styles.metricCard}>
+                            <div style={styles.metricIcon} className="inventory-icon">📦</div>
+                            <div style={styles.metricInfo}>
+                                <h3 style={styles.metricLabel}>Produtos em Estoque</h3>
+                                <p style={styles.metricValue}>{metrics.produtosEstoque}</p>
+                            </div>
+                        </div>
+
+                        {/* Cartão de Faturamento */}
+                        <div style={styles.metricCard}>
+                            <div style={styles.metricIcon} className="revenue-icon">💵</div>
+                            <div style={styles.metricInfo}>
+                                <h3 style={styles.metricLabel}>Faturamento Mensal</h3>
+                                <p style={styles.metricValue}>
+                                    {metrics.valorFaturado.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Cartão de Lucro */}
+                        <div style={styles.metricCard}>
+                            <div style={styles.metricIcon} className="profit-icon">📈</div>
+                            <div style={styles.metricInfo}>
+                                <h3 style={styles.metricLabel}>Lucro Mensal</h3>
+                                <p style={styles.metricValue}>
+                                    {metrics.lucro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Seção de Atividades Recentes e Gráficos */}
+                <section style={styles.dashboardGrid}>
+                    {/* Atividades Recentes */}
+                    <div style={styles.activityCard}>
+                        <h3 style={styles.cardTitle}>Atividades Recentes</h3>
+                        <ul style={styles.activityList}>
+                            {recentActivities.map(activity => (
+                                <li key={activity.id} style={styles.activityItem}>
+                                    <div style={styles.activityContent}>
+                                        <p style={styles.activityAction}>{activity.action}</p>
+                                        <p style={styles.activityTime}>{activity.time}</p>
+                                    </div>
+                                    {activity.value && <span style={styles.activityValue}>{activity.value}</span>}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
 
-                    <button
-                        style={{ ...styles.carouselArrow, right: '20px' }}
-                        onClick={goToNext}
-                    >
-                        <span style={styles.arrowIcon}>&gt;</span>
-                    </button>
-                </div>
-
-                {/* Indicadores do Carrossel */}
-                <div style={styles.carouselIndicators}>
-                    {images.map((_, index) => (
-                        <button
-                            key={index}
-                            style={{
-                                ...styles.indicator,
-                                ...(index === currentIndex && styles.activeIndicator)
-                            }}
-                            onClick={() => setCurrentIndex(index)}
-                        />
-                    ))}
-                </div>
-
-                {/* Seção de Destaques */}
-                <section style={styles.featuredSection}>
-                    <h2 style={styles.sectionTitle}>Destaques</h2>
-                    <div style={styles.featuredGrid}>
-                        {[1, 2, 3, 4].map((item) => (
-                            <div key={item} style={styles.featuredItem}>
-                                <div style={styles.featuredImage}></div>
-                                <h3 style={styles.featuredTitle}>Produto {item}</h3>
-                                <p style={styles.featuredDesc}>Descrição do produto destacado</p>
-                            </div>
-                        ))}
+                    {/* Gráfico de Vendas */}
+                    <div style={styles.chartCard}>
+                        <h3 style={styles.cardTitle}>Vendas Mensais</h3>
+                        <div style={styles.chartPlaceholder}>
+                            <p style={styles.chartText}>Gráfico de vendas será exibido aqui</p>
+                        </div>
                     </div>
                 </section>
             </main>
@@ -135,10 +138,11 @@ function Home() {
 
 const styles = {
     container: {
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', // Gradiente escuro
+        height: '100vh',
+        width: '100vw',
+        background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
         fontFamily: 'Arial, sans-serif',
-        color: '#f0f0f0', // Texto mais claro
+        color: '#f0f0f0',
         overflowX: 'hidden',
     },
     navbar: {
@@ -146,9 +150,9 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px 40px',
-        backgroundColor: 'rgba(15, 15, 15, 0.8)', // Preto semi-transparente
+        backgroundColor: 'rgba(15, 15, 15, 0.8)',
         backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)', // Borda sutil
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
     },
     navLeft: {
         display: 'flex',
@@ -168,148 +172,144 @@ const styles = {
     navButton: {
         background: 'transparent',
         border: 'none',
-        color: '#f0f0f0', // Texto claro
+        color: '#f0f0f0',
         fontSize: '16px',
         cursor: 'pointer',
         padding: '8px 12px',
         borderRadius: '4px',
         transition: 'all 0.3s ease',
         ':hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.1)', // Hover sutil
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
         },
     },
     logoutButton: {
         padding: '10px 16px',
         fontSize: '14px',
         borderRadius: '8px',
-        backgroundColor: '#3a7bd5', // Azul mais vibrante
+        backgroundColor: '#3a7bd5',
         color: 'white',
         border: 'none',
         cursor: 'pointer',
         fontWeight: 'bold',
         transition: 'all 0.3s ease',
         ':hover': {
-            backgroundColor: '#2c5fb3', // Azul mais escuro no hover
+            backgroundColor: '#2c5fb3',
         },
     },
     mainContent: {
-        padding: '20px 40px',
+        padding: '30px 40px',
         position: 'relative',
     },
-    carouselWrapper: {
-        position: 'relative',
+    metricsSection: {
         marginBottom: '40px',
-        overflow: 'hidden',
-        borderRadius: '16px',
     },
-    carouselContainer: {
-        display: 'flex',
-        overflowX: 'hidden',
-        scrollBehavior: 'smooth',
-        height: '400px',
-        width: '100%',
-        msOverflowStyle: 'none',
-        scrollbarWidth: 'none',
-    },
-    carouselSlide: {
-        minWidth: '100%',
-        height: '100%',
-        flexShrink: 0,
-        transition: 'transform 0.5s ease',
-    },
-    image: {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        display: 'block',
-    },
-    carouselArrow: {
-        position: 'absolute',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        backgroundColor: 'rgba(58, 123, 213, 0.8)', // Azul
-        color: 'white',
-        border: 'none',
-        borderRadius: '50%',
-        width: '48px',
-        height: '48px',
+    sectionTitle: {
         fontSize: '24px',
-        cursor: 'pointer',
-        zIndex: 10,
+        marginBottom: '20px',
+        color: '#ffffff',
+    },
+    metricsGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '20px',
+    },
+    metricCard: {
+        backgroundColor: 'rgba(30, 30, 30, 0.6)',
+        borderRadius: '12px',
+        padding: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '15px',
+        transition: 'all 0.3s ease',
+        ':hover': {
+            transform: 'translateY(-5px)',
+            boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
+        },
+    },
+    metricIcon: {
+        fontSize: '28px',
+        width: '60px',
+        height: '60px',
+        borderRadius: '50%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: 'all 0.3s ease',
-        ':hover': {
-            backgroundColor: 'rgba(58, 123, 213, 1)', // Azul sólido
-            transform: 'translateY(-50%) scale(1.1)',
-        },
+        backgroundColor: 'rgba(58, 123, 213, 0.2)',
     },
-    arrowIcon: {
-        display: 'block',
-        marginTop: '-2px',
+    metricInfo: {
+        flex: 1,
     },
-    carouselIndicators: {
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '10px',
-        marginBottom: '40px',
+    metricLabel: {
+        fontSize: '16px',
+        margin: '0 0 5px 0',
+        color: 'rgba(255, 255, 255, 0.8)',
     },
-    indicator: {
-        width: '12px',
-        height: '12px',
-        borderRadius: '50%',
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        border: 'none',
-        cursor: 'pointer',
-        padding: 0,
-        transition: 'all 0.3s ease',
+    metricValue: {
+        fontSize: '24px',
+        margin: 0,
+        fontWeight: 'bold',
+        color: '#ffffff',
     },
-    activeIndicator: {
-        backgroundColor: '#3a7bd5', // Azul
-        transform: 'scale(1.3)',
-    },
-    featuredSection: {
-        marginTop: '40px',
-    },
-    sectionTitle: {
-        fontSize: '28px',
-        marginBottom: '20px',
-        borderBottom: '2px solid rgba(255, 255, 255, 0.1)', // Borda sutil
-        paddingBottom: '10px',
-        color: '#ffffff', // Branco puro para títulos
-    },
-    featuredGrid: {
+    dashboardGrid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+        gridTemplateColumns: '1fr 2fr',
         gap: '20px',
     },
-    featuredItem: {
-        backgroundColor: 'rgba(30, 30, 30, 0.6)', // Fundo escuro
+    activityCard: {
+        backgroundColor: 'rgba(30, 30, 30, 0.6)',
         borderRadius: '12px',
         padding: '20px',
-        backdropFilter: 'blur(5px)',
-        transition: 'transform 0.3s ease',
-        ':hover': {
-            transform: 'translateY(-5px)',
-            boxShadow: '0 10px 20px rgba(0,0,0,0.3)', // Sombra no hover
-        },
     },
-    featuredImage: {
-        width: '100%',
-        height: '150px',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)', // Cinza muito claro
-        borderRadius: '8px',
-        marginBottom: '15px',
+    chartCard: {
+        backgroundColor: 'rgba(30, 30, 30, 0.6)',
+        borderRadius: '12px',
+        padding: '20px',
     },
-    featuredTitle: {
+    cardTitle: {
         fontSize: '18px',
-        margin: '0 0 10px 0',
+        margin: '0 0 20px 0',
+        color: '#ffffff',
     },
-    featuredDesc: {
-        fontSize: '14px',
+    activityList: {
+        listStyle: 'none',
+        padding: 0,
         margin: 0,
-        opacity: 0.8,
+    },
+    activityItem: {
+        padding: '15px 0',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    activityContent: {
+        flex: 1,
+    },
+    activityAction: {
+        margin: '0 0 5px 0',
+        fontSize: '14px',
+    },
+    activityTime: {
+        margin: 0,
+        fontSize: '12px',
+        color: 'rgba(255, 255, 255, 0.6)',
+    },
+    activityValue: {
+        backgroundColor: 'rgba(58, 123, 213, 0.2)',
+        padding: '5px 10px',
+        borderRadius: '20px',
+        fontSize: '14px',
+    },
+    chartPlaceholder: {
+        height: '300px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: '8px',
+    },
+    chartText: {
+        color: 'rgba(255, 255, 255, 0.5)',
     },
 };
 
