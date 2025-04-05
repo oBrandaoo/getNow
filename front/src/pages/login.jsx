@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 function Login() {
     const [mensagem, setMensagem] = useState('');
     const [mensagemTipo, setMensagemTipo] = useState('');
@@ -57,9 +58,10 @@ function Login() {
 
 const styles = {
     title: {
+        fontFamily: 'Poppins, sans-serif',
         color: '#fff',
         fontWeight: '600',
-        fontSize: '28px',
+        fontSize: '32px',
         textAlign: 'center',
         marginBottom: '20px',
     },
@@ -69,11 +71,12 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: 'linear-gradient(135deg, #1f4037, #99f2c8)',
+        background: 'linear-gradient(135deg, #667eea, #764ba2)',
         padding: '0 20px',
         boxSizing: 'border-box',
     },
     form: {
+        fontFamily: 'Poppins, sans-serif',
         backdropFilter: 'blur(10px)',
         backgroundColor: 'rgba(255, 255, 255, 0.15)',
         borderRadius: '16px',
@@ -88,6 +91,7 @@ const styles = {
         color: 'white',
     },
     input: {
+        fontFamily: 'Poppins, sans-serif',
         padding: '12px 15px',
         fontSize: '16px',
         borderRadius: '8px',
@@ -98,10 +102,11 @@ const styles = {
         transition: 'all 0.3s ease',
     },
     button: {
+        fontFamily: 'Poppins, sans-serif',
         padding: '12px',
         fontSize: '16px',
-        backgroundColor: '#00c9a7',
-        color: 'white',
+        backgroundColor: '#7ED6A5',
+        color: 'black',
         border: 'none',
         borderRadius: '8px',
         cursor: 'pointer',
