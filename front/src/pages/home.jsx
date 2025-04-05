@@ -13,6 +13,7 @@ function Home() {
     });
 
     const navItems = [
+        { name: 'Dashboard', path: '/home' },
         { name: 'Produtos', path: '/products' },
         { name: 'Serviços', path: '/services' },
         { name: 'Relatórios', path: '/reports' },

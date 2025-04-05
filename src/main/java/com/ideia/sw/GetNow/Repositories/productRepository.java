@@ -2,7 +2,7 @@ package com.ideia.sw.GetNow.Repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.Product;
+import com.ideia.sw.GetNow.Product;
 
 import java.util.List;
 

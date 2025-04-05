@@ -1,6 +1,4 @@
-package com;
-
-import com.ideia.sw.GetNow.User;
+package com.ideia.sw.GetNow;
 
 import jakarta.persistence.*;
 
