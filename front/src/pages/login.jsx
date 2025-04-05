@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createRoutesFromElements, useNavigate } from 'react-router-dom';
 
 function Login() {
     const [mensagem, setMensagem] = useState('');
@@ -57,11 +57,13 @@ function Login() {
 
 const styles = {
     title: {
+        fontFamily:'Arial',
         color: '#fff',
         fontWeight: '600',
         fontSize: '28px',
         textAlign: 'center',
         marginBottom: '20px',
+        textShadow: '0 0 3px #ffffff80',
     },
     container: {
         height: '100vh',
@@ -69,7 +71,7 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: 'linear-gradient(135deg, #1f4037, #99f2c8)',
+        background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
         padding: '0 20px',
         boxSizing: 'border-box',
     },
@@ -88,20 +90,22 @@ const styles = {
         color: 'white',
     },
     input: {
+        cursor: 'text',
         padding: '12px 15px',
         fontSize: '16px',
         borderRadius: '8px',
         border: 'none',
         outline: 'none',
-        backgroundColor: 'rgba(255, 255, 255, 0.25)',
-        color: '#fff',
+        backgroundColor: 'rgba(255, 255, 255, 0.35)',
+        color: 'white',
         transition: 'all 0.3s ease',
     },
+    
     button: {
         padding: '12px',
         fontSize: '16px',
-        backgroundColor: '#00c9a7',
-        color: 'white',
+        backgroundColor: '#7ED6A5',
+        color: 'black',
         border: 'none',
         borderRadius: '8px',
         cursor: 'pointer',
@@ -115,7 +119,7 @@ const styles = {
         borderRadius: '8px',
         textAlign: 'center',
         fontWeight: 'bold',
-      },
+    },
       erro: {
         backgroundColor: '#f8d7da',
         color: '#721c24',
@@ -123,7 +127,7 @@ const styles = {
         borderRadius: '8px',
         textAlign: 'center',
         fontWeight: 'bold',
-      },
+    },
 };
 
 export default Login;
