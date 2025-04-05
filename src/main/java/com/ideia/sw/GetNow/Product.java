@@ -1,7 +1,9 @@
 package com.ideia.sw.GetNow;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "products")
 public class Product {
@@ -18,5 +20,4 @@ public class Product {
     @JoinColumn(name = "vendedor_id")
     private User vendedor;
 
-    // Getters e setters
 }

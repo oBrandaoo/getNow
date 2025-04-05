@@ -1,9 +1,11 @@
 package com.ideia.sw.GetNow;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.util.List;
 
-
+@Data
 @Entity
 @Table(name = "users")
 public class User {
@@ -20,5 +22,4 @@ public class User {
     @OneToMany(mappedBy = "vendedor", cascade = CascadeType.ALL)
     private List<Product> produtos;
 
-    // Getters e setters
 }
