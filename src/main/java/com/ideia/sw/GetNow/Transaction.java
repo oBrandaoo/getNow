@@ -15,32 +15,27 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal valor; // ou "amount" se quiser manter o padrão em inglês
-    private String tipo;      // exemplo: COMPRA, REEMBOLSO, CHARGEBACK
-    private String status;    // exemplo: PENDENTE, CONCLUIDA, FALHOU
-    private String metodo;    // exemplo: CARTAO, PIX, DINHEIRO
-    private String descricao;
+    private BigDecimal amount;     // "valor"
+    private String type;           // e.g., PURCHASE, REFUND, CHARGEBACK
+    private String status;         // e.g., PENDING, COMPLETED, FAILED
+    private String method;         // e.g., CARD, PIX, CASH
+    private String description;
 
-    private LocalDateTime criadoEm;
-    private LocalDateTime atualizadoEm;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private User usuario;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @PrePersist
     public void onCreate() {
-        this.criadoEm = LocalDateTime.now();
-        this.atualizadoEm = this.criadoEm;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = this.createdAt;
     }
 
     @PreUpdate
     public void onUpdate() {
-        this.atualizadoEm = LocalDateTime.now();
-    }
-
-    public void setCreatedAt(LocalDateTime now) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setCreatedAt'");
+        this.updatedAt = LocalDateTime.now();
     }
 }

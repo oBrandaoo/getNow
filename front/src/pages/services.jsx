@@ -12,9 +12,11 @@ function AudioTransaction() {
     const audioChunksRef = useRef([]);
 
     const navItems = [
-        { name: 'Dashboard', path: '/' },
+        { name: 'Dashboard', path: '/home' },
         { name: 'Produtos', path: '/products' },
+        { name: 'Serviços', path: '/services' },
         { name: 'Relatórios', path: '/reports' },
+        { name: 'Configurações', path: '/settings' },
     ];
 
     const handleLogout = () => {

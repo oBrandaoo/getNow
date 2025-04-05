@@ -2,24 +2,22 @@ package com.ideia.sw.GetNow;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "users")
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    private String name;
     private String email;
-    private String senha;
-    private String tipo; // "vendedor" ou "comprador"
+    private String password;
+    private String role; // "seller" or "buyer"
 
-    @OneToMany(mappedBy = "vendedor", cascade = CascadeType.ALL)
-    private List<Product> produtos;
-
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    private List<Product> products;
 }

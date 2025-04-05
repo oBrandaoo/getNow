@@ -10,6 +10,4 @@ import com.ideia.sw.GetNow.Transaction;
 @Repository
 public interface transactionRepository extends JpaRepository<Transaction, Long> {
     
-    List<Transaction> findByUsuarioId(Long usuarioId);
-    List<Transaction> findByStatus(String status);
 }
