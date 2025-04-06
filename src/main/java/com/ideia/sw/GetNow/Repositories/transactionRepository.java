@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.ideia.sw.GetNow.Transaction;
 
 @Repository
-public interface transactionRepository extends JpaRepository<Transaction, Long> {
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     
 }

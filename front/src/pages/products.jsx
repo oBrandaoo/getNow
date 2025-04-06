@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 function Products() {
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
-    
+
     const [products, setProducts] = useState([
         { id: 1, name: 'Smartphone Premium', category: 'Eletrônicos', price: 2999.90, stock: 15, sku: 'ELET123' },
         { id: 2, name: 'Notebook Pro', category: 'Eletrônicos', price: 5499.00, stock: 8, sku: 'ELET456' },
@@ -45,7 +45,11 @@ function Products() {
             {/* Navbar */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>GetNow - Produtos</h1>
+                    <h1 style={styles.logo}>
+                        <img src="../../logo.png" alt="Logo GetNow" style={styles.logoImage} />
+                        GetNow - Produtos
+                    </h1>
+
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
@@ -112,7 +116,7 @@ function Products() {
                                     <td style={styles.tableCell}>{product.sku}</td>
                                     <td style={styles.tableCell}>
                                         <button style={styles.actionButton}>Editar</button>
-                                        <button style={{...styles.actionButton, ...styles.deleteButton}}>Excluir</button>
+                                        <button style={{ ...styles.actionButton, ...styles.deleteButton }}>Excluir</button>
                                     </td>
                                 </tr>
                             ))}

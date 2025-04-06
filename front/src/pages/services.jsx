@@ -60,19 +60,79 @@ function AudioTransaction() {
     };
 
     const processAudio = async () => {
-        if (!audioUrl) return;
-        
+        if (!audioChunksRef.current.length) {
+            console.error("Nenhum áudio para enviar!");
+            return;
+        }
+    
         setIsProcessing(true);
         
-        // Simulação de chamada à API de IA
         try {
-            // Substitua por chamada real à sua API
-            const mockResponse = await mockApiCall();
-            setTranscription(mockResponse);
+            const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+            console.log("Enviando áudio:", { size: audioBlob.size });
+    
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'recording.webm');
+            formData.append('userId', '123'); 
+    
+            const response = await fetch('http://localhost:8080/api/transactions/process-audio', {
+                method: 'POST',
+                body: formData
+            });
+    
+            console.log("Resposta do backend:", response);
+    
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const data = await response.json();
+            console.log("Dados mockados recebidos:", data);
+            
+            setTranscription([
+                `Transação: ${data.description}`,
+                `Valor: R$ ${data.amount}`,
+                `Método: ${data.method}`
+            ].join("\n"));
+            
         } catch (error) {
-            alert('Erro ao processar áudio');
+            console.error("Erro completo:", error);
+            alert("Erro ao processar áudio (verifique o console)");
         } finally {
             setIsProcessing(false);
+        }
+    };
+    
+    const saveTransaction = async () => {
+        if (!transcription) return;
+        
+        setIsSaving(true);
+        
+        try {
+            const response = await fetch('http://localhost:8080/api/transactions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    // Extrair dados da transcrição para o objeto de transação
+                    // (você pode precisar parsear o texto formatado)
+                    amount: 245.90,
+                    description: "Compra de materiais de escritório",
+                    type: "PURCHASE",
+                    method: "CARD",
+                    status: "COMPLETED"
+                }),
+                credentials: 'include'
+            });
+    
+            if (!response.ok) throw new Error('Erro ao salvar');
+            
+            alert('Transação salva com sucesso!');
+            resetForm();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Erro ao salvar transação');
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -88,23 +148,6 @@ function AudioTransaction() {
                 resolve(mockData);
             }, 2000);
         });
-    };
-
-    const saveTransaction = async () => {
-        if (!transcription) return;
-        
-        setIsSaving(true);
-        
-        try {
-            // Substitua por chamada real ao seu backend
-            await mockSaveToDatabase(transcription);
-            alert('Transação salva com sucesso!');
-            resetForm();
-        } catch (error) {
-            alert('Erro ao salvar transação');
-        } finally {
-            setIsSaving(false);
-        }
     };
 
     const mockSaveToDatabase = (data) => {
@@ -229,47 +272,49 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '15px 30px',
-        backgroundColor: 'rgba(15, 15, 15, 0.9)',
+        padding: '20px 40px',
+        backgroundColor: 'rgba(15, 15, 15, 0.8)',
+        backdropFilter: 'blur(10px)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
     },
     navLeft: {
         display: 'flex',
         alignItems: 'center',
-        gap: '30px',
+        gap: '40px',
     },
     logo: {
-        fontSize: '20px',
+        fontSize: '24px',
         fontWeight: 'bold',
         color: '#fff',
         margin: 0,
     },
     navLinks: {
         display: 'flex',
-        gap: '15px',
+        gap: '20px',
     },
     navButton: {
         background: 'transparent',
         border: 'none',
         color: '#f0f0f0',
-        fontSize: '14px',
+        fontSize: '16px',
         cursor: 'pointer',
         padding: '8px 12px',
-        borderRadius: '6px',
-        transition: 'all 0.2s ease',
+        borderRadius: '4px',
+        transition: 'all 0.3s ease',
         ':hover': {
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
         },
     },
     logoutButton: {
-        padding: '8px 16px',
-        borderRadius: '6px',
+        padding: '10px 16px',
+        fontSize: '14px',
+        borderRadius: '8px',
         backgroundColor: '#3a7bd5',
         color: 'white',
         border: 'none',
         cursor: 'pointer',
         fontWeight: 'bold',
-        transition: 'all 0.2s ease',
+        transition: 'all 0.3s ease',
         ':hover': {
             backgroundColor: '#2c5fb3',
         },

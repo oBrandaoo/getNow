@@ -8,5 +8,5 @@ import com.ideia.sw.GetNow.Product;
 import java.util.List;
 
 @Repository
-public interface productRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 }

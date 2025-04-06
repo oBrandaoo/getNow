@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ideia.sw.GetNow.User;
 
 @Repository
-public interface userRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }
