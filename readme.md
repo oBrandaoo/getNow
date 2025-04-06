@@ -1,3 +1,6 @@
+# Versão do Node utilizada:
+v20.11.1
+
 # Comando para rodar back end
 ./mvnw spring-boot:run
 
