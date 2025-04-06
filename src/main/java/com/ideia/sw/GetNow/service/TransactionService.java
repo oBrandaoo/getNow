@@ -1,5 +1,6 @@
 package com.ideia.sw.GetNow.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -28,6 +29,10 @@ public class TransactionService {
         transaction.setUser(user);
         return transactionRepository.save(transaction);
     }
+
+    public List<Transaction> getAllTransactions() {
+        return transactionRepository.findAll();
+    }    
 
     public Optional<Transaction> getTransactionById(Long id) {
         return transactionRepository.findById(id);

@@ -1,7 +1,7 @@
 package com.ideia.sw.GetNow.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ideia.sw.GetNow.Transaction;
-import com.ideia.sw.GetNow.service.AudioProcessingService;
 import com.ideia.sw.GetNow.service.TransactionService;
 
 @RestController
@@ -22,37 +21,44 @@ import com.ideia.sw.GetNow.service.TransactionService;
 public class TransactionController {
 
     private final TransactionService transactionService;
-    private final AudioProcessingService audioProcessingService;
 
-    public TransactionController(TransactionService transactionService,
-            AudioProcessingService audioProcessingService) {
+    public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
-        this.audioProcessingService = audioProcessingService;
     }
 
     @PostMapping("/process-audio")
-    public ResponseEntity<Map<String, String>> processAudioTransaction(
-            @RequestParam("audio") MultipartFile audioFile,
+    public ResponseEntity<Transaction> mockProcessAudioTransaction(
+            @RequestParam(value = "audio", required = false) MultipartFile audioFile,
             @RequestParam("userId") Long userId) {
 
-        System.out.println(
-                "Arquivo recebido: " + audioFile.getOriginalFilename() + " (" + audioFile.getSize() + " bytes)");
+        Transaction mockTransaction = new Transaction();
+        mockTransaction.setAmount(new BigDecimal("245.90"));
+        mockTransaction.setType("PURCHASE");
+        mockTransaction.setMethod("CARD");
+        mockTransaction.setDescription("Compra mockada de materiais de escritório");
+        mockTransaction.setStatus("COMPLETED");
 
-        Map<String, String> mockResponse = new HashMap<>();
-        mockResponse.put("amount", "245.90");
-        mockResponse.put("type", "PURCHASE");
-        mockResponse.put("description", "Compra de materiais de escritório");
-        mockResponse.put("method", "CARD");
+        Transaction savedTransaction = transactionService.createTransaction(
+                userId != null ? userId : 1L,
+                mockTransaction);
 
-        return ResponseEntity.ok(mockResponse); // Sempre retorna sucesso
+        return ResponseEntity.ok(savedTransaction);
     }
 
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(
             @RequestBody Transaction transaction,
-            @RequestParam Long userId) {
-        Transaction savedTransaction = transactionService.createTransaction(userId, transaction);
+            @RequestParam(value = "userId", required = false) Long userId) {
+
+        Long resolvedUserId = userId != null ? userId : 1L;
+        Transaction savedTransaction = transactionService.createTransaction(resolvedUserId, transaction);
         return ResponseEntity.ok(savedTransaction);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Transaction>> getAllTransactions() {
+        List<Transaction> transactions = transactionService.getAllTransactions();
+        return ResponseEntity.ok(transactions);
     }
 
     @GetMapping("/{id}")

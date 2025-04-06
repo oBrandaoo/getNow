@@ -16,7 +16,7 @@ function Products() {
 
     const navItems = [
         { name: 'Dashboard', path: '/home' },
-        { name: 'Produtos', path: '/products' },
+        { name: 'Produtos', path: '/products', active: true },
         { name: 'Serviços', path: '/services' },
         { name: 'Relatórios', path: '/reports' },
         { name: 'Configurações', path: '/settings' },
@@ -45,13 +45,16 @@ function Products() {
             {/* Navbar */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>GetNow - Produtos</h1>
+                    <h1 style={styles.logo}>CashFlow - Produtos</h1>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
                                 key={index}
-                                style={styles.navButton}
-                                onClick={() => handleNavClick(item.path)}
+                                style={{
+                                    ...styles.navButton,
+                                    ...(item.active && styles.activeNavButton)
+                                }}
+                                onClick={() => navigate(item.path)}
                             >
                                 {item.name}
                             </button>
@@ -176,6 +179,9 @@ const styles = {
         ':hover': {
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
         },
+    },
+    activeNavButton: {
+        backgroundColor: 'rgba(58, 123, 213, 0.5)',
     },
     logoutButton: {
         padding: '10px 16px',

@@ -13,7 +13,7 @@ function Home() {
     });
 
     const navItems = [
-        { name: 'Dashboard', path: '/home' },
+        { name: 'Dashboard', path: '/home', active: true },
         { name: 'Produtos', path: '/products' },
         { name: 'Serviços', path: '/services' },
         { name: 'Relatórios', path: '/reports' },
@@ -40,13 +40,16 @@ function Home() {
             {/* Navbar */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>GetNow - Dashboard</h1>
+                    <h1 style={styles.logo}>CashFlow - Dashboard</h1>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
                                 key={index}
-                                style={styles.navButton}
-                                onClick={() => handleNavClick(item.path)}
+                                style={{
+                                    ...styles.navButton,
+                                    ...(item.active && styles.activeNavButton)
+                                }}
+                                onClick={() => navigate(item.path)}
                             >
                                 {item.name}
                             </button>
@@ -182,6 +185,9 @@ const styles = {
         ':hover': {
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
         },
+    },
+    activeNavButton: {
+        backgroundColor: 'rgba(58, 123, 213, 0.5)',
     },
     logoutButton: {
         padding: '10px 16px',

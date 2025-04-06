@@ -12,22 +12,16 @@ function Reports() {
         status: ''
     });
 
+    // NavItems consistentes
     const navItems = [
         { name: 'Dashboard', path: '/home' },
         { name: 'Produtos', path: '/products' },
         { name: 'Serviços', path: '/services' },
-        { name: 'Relatórios', path: '/reports' },
-        { name: 'Configurações', path: '/settings' },
+        { name: 'Relatórios', path: '/reports', active: true },
+        { name: 'Configurações', path: '/settings' }
     ];
 
-    const handleLogout = () => {
-        navigate('/login');
-    };
-
-    const handleNavClick = (path) => {
-        navigate(path);
-    };
-
+    // Busca transações do backend
     useEffect(() => {
         fetchTransactions();
     }, []);
@@ -35,6 +29,7 @@ function Reports() {
     const fetchTransactions = async () => {
         setLoading(true);
         try {
+            // Construir query params
             const params = new URLSearchParams();
             if (filters.startDate) params.append('startDate', filters.startDate);
             if (filters.endDate) params.append('endDate', filters.endDate);
@@ -64,10 +59,6 @@ function Reports() {
         setFilters(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleExport = () => {
-        alert('Exportando relatório...');
-    };
-
     const handleResetFilters = () => {
         setFilters({
             startDate: '',
@@ -75,11 +66,32 @@ function Reports() {
             type: '',
             status: ''
         });
+        fetchTransactions();
+    };
+
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(value);
+    };
+
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('pt-BR');
+    };
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'COMPLETED': return '#2ecc71';
+            case 'PENDING': return '#f39c12';
+            case 'FAILED': return '#e74c3c';
+            default: return '#95a5a6';
+        }
     };
 
     return (
         <div style={styles.container}>
-            {/* Navbar com navItems corrigidos */}
+            {/* Navbar */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
                     <h1 style={styles.logo}>GetNow - Relatórios</h1>
@@ -87,15 +99,18 @@ function Reports() {
                         {navItems.map((item, index) => (
                             <button
                                 key={index}
-                                style={styles.navButton}
-                                onClick={() => handleNavClick(item.path)}
+                                style={{
+                                    ...styles.navButton,
+                                    ...(item.active && styles.activeNavButton)
+                                }}
+                                onClick={() => navigate(item.path)}
                             >
                                 {item.name}
                             </button>
                         ))}
                     </div>
                 </div>
-                <button style={styles.logoutButton} onClick={handleLogout}>Sair</button>
+                <button style={styles.logoutButton} onClick={() => navigate('/login')}>Sair</button>
             </div>
 
             {/* Conteúdo Principal */}
@@ -174,22 +189,16 @@ function Reports() {
                     </div>
                 </section>
 
-                {/* Ações */}
-                <div style={styles.actionsBar}>
-                    <button
-                        style={styles.exportButton}
-                        onClick={handleExport}
-                    >
-                        Exportar Relatório
-                    </button>
-                </div>
-
-                {/* Tabela de Resultados */}
+                {/* Tabela de Transações */}
                 <div style={styles.tableContainer}>
                     {loading ? (
-                        <p style={styles.loadingText}>Carregando transações...</p>
+                        <div style={styles.loadingContainer}>
+                            <p style={styles.loadingText}>Carregando transações...</p>
+                        </div>
                     ) : transactions.length === 0 ? (
-                        <p style={styles.noResults}>Nenhuma transação encontrada</p>
+                        <div style={styles.emptyState}>
+                            <p style={styles.emptyText}>Nenhuma transação encontrada</p>
+                        </div>
                     ) : (
                         <table style={styles.table}>
                             <thead>
@@ -197,7 +206,7 @@ function Reports() {
                                     <th style={styles.tableHeader}>ID</th>
                                     <th style={styles.tableHeader}>Data</th>
                                     <th style={styles.tableHeader}>Descrição</th>
-                                    <th style={styles.tableHeader}>Valor (R$)</th>
+                                    <th style={styles.tableHeader}>Valor</th>
                                     <th style={styles.tableHeader}>Tipo</th>
                                     <th style={styles.tableHeader}>Método</th>
                                     <th style={styles.tableHeader}>Status</th>
@@ -207,20 +216,26 @@ function Reports() {
                                 {transactions.map(transaction => (
                                     <tr key={transaction.id} style={styles.tableRow}>
                                         <td style={styles.tableCell}>{transaction.id}</td>
-                                        <td style={styles.tableCell}>
-                                            {new Date(transaction.createdAt).toLocaleDateString()}
-                                        </td>
+                                        <td style={styles.tableCell}>{formatDate(transaction.createdAt)}</td>
                                         <td style={styles.tableCell}>{transaction.description}</td>
+                                        <td style={styles.tableCell}>{formatCurrency(transaction.amount)}</td>
                                         <td style={styles.tableCell}>
-                                            {transaction.amount.toFixed(2)}
+                                            {transaction.type === 'SERVICE_PAYMENT' && 'Pagamento Serviço'}
+                                            {transaction.type === 'PRODUCT_PURCHASE' && 'Compra Produto'}
+                                            {transaction.type === 'REFUND' && 'Reembolso'}
                                         </td>
-                                        <td style={styles.tableCell}>{transaction.type}</td>
-                                        <td style={styles.tableCell}>{transaction.method}</td>
+                                        <td style={styles.tableCell}>
+                                            {transaction.method === 'CARD' && 'Cartão'}
+                                            {transaction.method === 'PIX' && 'PIX'}
+                                            {transaction.method === 'CASH' && 'Dinheiro'}
+                                        </td>
                                         <td style={{
                                             ...styles.tableCell,
                                             color: getStatusColor(transaction.status)
                                         }}>
-                                            {transaction.status}
+                                            {transaction.status === 'COMPLETED' && 'Completo'}
+                                            {transaction.status === 'PENDING' && 'Pendente'}
+                                            {transaction.status === 'FAILED' && 'Falhou'}
                                         </td>
                                     </tr>
                                 ))}
@@ -233,17 +248,7 @@ function Reports() {
     );
 }
 
-// Função auxiliar para cor do status
-const getStatusColor = (status) => {
-    switch (status) {
-        case 'COMPLETED': return '#2ecc71';
-        case 'PENDING': return '#f39c12';
-        case 'FAILED': return '#e74c3c';
-        default: return '#333';
-    }
-};
-
-// Estilos consistentes com a página de produtos
+// Estilos
 const styles = {
     container: {
         height: '100vh',
@@ -289,6 +294,9 @@ const styles = {
         ':hover': {
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
         },
+    },
+    activeNavButton: {
+        backgroundColor: 'rgba(58, 123, 213, 0.5)',
     },
     logoutButton: {
         padding: '10px 16px',
@@ -371,24 +379,6 @@ const styles = {
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
         },
     },
-    actionsBar: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        marginBottom: '20px',
-    },
-    exportButton: {
-        padding: '10px 20px',
-        borderRadius: '6px',
-        backgroundColor: '#00c9a7',
-        color: 'white',
-        border: 'none',
-        cursor: 'pointer',
-        fontWeight: 'bold',
-        transition: 'all 0.3s ease',
-        ':hover': {
-            backgroundColor: '#00a58e',
-        },
-    },
     tableContainer: {
         backgroundColor: 'rgba(30, 30, 30, 0.6)',
         borderRadius: '12px',
@@ -396,12 +386,20 @@ const styles = {
         backdropFilter: 'blur(5px)',
         overflowX: 'auto',
     },
+    loadingContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '20px',
+    },
     loadingText: {
-        textAlign: 'center',
         color: 'rgba(255, 255, 255, 0.7)',
     },
-    noResults: {
-        textAlign: 'center',
+    emptyState: {
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '40px',
+    },
+    emptyText: {
         color: 'rgba(255, 255, 255, 0.5)',
         fontStyle: 'italic',
     },

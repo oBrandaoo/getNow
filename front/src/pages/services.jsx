@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 function AudioTransaction() {
     const navigate = useNavigate();
+    const [dadosTransacao, setDadosTransacao] = useState(null);
+    const [mensagem, setMensagem] = useState("");
     const [isRecording, setIsRecording] = useState(false);
     const [audioUrl, setAudioUrl] = useState('');
     const [transcription, setTranscription] = useState('');
@@ -14,7 +16,7 @@ function AudioTransaction() {
     const navItems = [
         { name: 'Dashboard', path: '/home' },
         { name: 'Produtos', path: '/products' },
-        { name: 'Serviços', path: '/services' },
+        { name: 'Serviços', path: '/services', active: true },
         { name: 'Relatórios', path: '/reports' },
         { name: 'Configurações', path: '/settings' },
     ];
@@ -60,81 +62,75 @@ function AudioTransaction() {
     };
 
     const processAudio = async () => {
-        if (!audioChunksRef.current.length) {
-            console.error("Nenhum áudio para enviar!");
-            return;
-        }
-    
         setIsProcessing(true);
-        
+    
         try {
-            const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-            console.log("Enviando áudio:", { size: audioBlob.size });
+            await new Promise(resolve => setTimeout(resolve, 1500));
     
-            const formData = new FormData();
-            formData.append('audio', audioBlob, 'recording.webm');
-            formData.append('userId', '123'); 
+            const mockResponse = {
+                amount: 245.90,
+                type: "PURCHASE",
+                description: "Compra de materiais de escritório",
+                method: "CARD"
+            };
     
-            const response = await fetch('http://localhost:8080/api/transactions/process-audio', {
-                method: 'POST',
-                body: formData
-            });
+            // Salva os dados simulados para uso posterior no save
+            setDadosTransacao(mockResponse);
     
-            console.log("Resposta do backend:", response);
-    
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            
-            const data = await response.json();
-            console.log("Dados mockados recebidos:", data);
-            
             setTranscription([
-                `Transação: ${data.description}`,
-                `Valor: R$ ${data.amount}`,
-                `Método: ${data.method}`
+                `Transação: ${mockResponse.description}`,
+                `Valor: R$ ${mockResponse.amount.toFixed(2)}`,
+                `Método: ${mockResponse.method}`
             ].join("\n"));
-            
+    
         } catch (error) {
-            console.error("Erro completo:", error);
-            alert("Erro ao processar áudio (verifique o console)");
+            console.error("Erro na simulação:", error);
+            alert("Erro na simulação (verifique o console)");
         } finally {
             setIsProcessing(false);
         }
-    };
-    
-    const saveTransaction = async () => {
-        if (!transcription) return;
-        
-        setIsSaving(true);
-        
-        try {
-            const response = await fetch('http://localhost:8080/api/transactions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    // Extrair dados da transcrição para o objeto de transação
-                    // (você pode precisar parsear o texto formatado)
-                    amount: 245.90,
-                    description: "Compra de materiais de escritório",
-                    type: "PURCHASE",
-                    method: "CARD",
-                    status: "COMPLETED"
-                }),
-                credentials: 'include'
-            });
-    
-            if (!response.ok) throw new Error('Erro ao salvar');
-            
-            alert('Transação salva com sucesso!');
-            resetForm();
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Erro ao salvar transação');
-        } finally {
-            setIsSaving(false);
+    };    
+
+    const handleSave = async () => {
+        if (!dadosTransacao) {
+            alert("Nenhuma transação para salvar.");
+            return;
         }
-    };
+    
+        try {
+            const saved = await saveTransaction(dadosTransacao, 1);
+            setMensagem("Transação salva com sucesso!");
+            navigate("/reports");
+        } catch (error) {
+            setMensagem("Erro ao salvar transação.");
+        }
+    };    
+
+    const saveTransaction = async (transaction, userId) => {
+        try {
+            const response = await fetch(
+                `http://localhost:8080/api/transactions?userId=${userId}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(transaction),
+                }
+            );
+
+            if (!response.ok) {
+                const msg = await response.text();
+                console.error("Erro ao salvar transação:", msg);
+                throw new Error("Erro ao salvar transação");
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error("Erro detalhado:", error);
+            throw error;
+        }
+    }
 
     const mockApiCall = () => {
         return new Promise((resolve) => {
@@ -170,13 +166,16 @@ function AudioTransaction() {
             {/* Navbar Simplificada */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                <h1 style={styles.logo}>GetNow - Registro por áudio</h1>
+                    <h1 style={styles.logo}>CashFlow - Registro por áudio</h1>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
                                 key={index}
-                                style={styles.navButton}
-                                onClick={() => handleNavClick(item.path)}
+                                style={{
+                                    ...styles.navButton,
+                                    ...(item.active && styles.activeNavButton)
+                                }}
+                                onClick={() => navigate(item.path)}
                             >
                                 {item.name}
                             </button>
@@ -190,11 +189,11 @@ function AudioTransaction() {
             <main style={styles.mainContent}>
                 <section style={styles.section}>
                     <h2 style={styles.sectionTitle}>Registrar Nova Transação por Áudio</h2>
-                    
+
                     <div style={styles.audioSection}>
                         {/* Controles de Gravação */}
                         <div style={styles.recordingContainer}>
-                            <button 
+                            <button
                                 style={isRecording ? styles.stopButton : styles.recordButton}
                                 onClick={isRecording ? stopRecording : startRecording}
                                 disabled={isProcessing || isSaving}
@@ -207,24 +206,24 @@ function AudioTransaction() {
                                     'Iniciar Gravação'
                                 )}
                             </button>
-                            
+
                             {audioUrl && (
                                 <div style={styles.audioPreview}>
                                     <audio controls src={audioUrl} style={styles.audioElement} />
                                 </div>
                             )}
                         </div>
-                        
+
                         {/* Botão de Processamento */}
-                        <button 
-                            style={styles.processButton} 
+                        <button
+                            style={styles.processButton}
                             onClick={processAudio}
                             disabled={!audioUrl || isRecording || isProcessing || isSaving}
                         >
                             {isProcessing ? 'Analisando...' : 'Processar com IA'}
                         </button>
                     </div>
-                    
+
                     {/* Transcrição Gerada */}
                     {transcription && (
                         <div style={styles.transcriptionSection}>
@@ -234,21 +233,21 @@ function AudioTransaction() {
                                     <p key={i} style={styles.transcriptionLine}>{line}</p>
                                 ))}
                             </div>
-                            
+
                             <div style={styles.actionButtons}>
-                                <button 
+                                <button
                                     style={styles.cancelButton}
                                     onClick={resetForm}
                                     disabled={isSaving}
                                 >
                                     Cancelar
                                 </button>
-                                <button 
+                                <button
                                     style={styles.saveButton}
-                                    onClick={saveTransaction}
+                                    onClick={handleSave}
                                     disabled={isSaving}
                                 >
-                                    {isSaving ? 'Salvando...' : 'Confirmar Transação'}
+                                    {isSaving ? 'Salvando...' : 'Salvar Transação'}
                                 </button>
                             </div>
                         </div>
@@ -304,6 +303,9 @@ const styles = {
         ':hover': {
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
         },
+    },
+    activeNavButton: {
+        backgroundColor: 'rgba(58, 123, 213, 0.5)',
     },
     logoutButton: {
         padding: '10px 16px',
