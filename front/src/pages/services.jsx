@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo_CashFlow.svg';
 
 function AudioTransaction() {
     const navigate = useNavigate();
@@ -63,10 +64,10 @@ function AudioTransaction() {
 
     const processAudio = async () => {
         setIsProcessing(true);
-    
+
         try {
             await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
             const mockResponse = {
                 amount: 245.90,
                 amountBrute: 200.00,
@@ -74,30 +75,30 @@ function AudioTransaction() {
                 description: "Mesa para construção",
                 method: "CARD"
             };
-    
+
             setDadosTransacao(mockResponse);
-    
+
             setTranscription([
                 `Transação: ${mockResponse.description}`,
                 `Valor: R$ ${mockResponse.amount.toFixed(2)}`,
                 `Valor Bruto: R$ ${mockResponse.amountBrute.toFixed(2)}`,
                 `Método: ${mockResponse.method === 'CARD' ? 'Cartão de crédito' : mockResponse.method}`
             ].join("\n"));
-    
+
         } catch (error) {
             console.error("Erro na simulação:", error);
             alert("Erro na simulação (verifique o console)");
         } finally {
             setIsProcessing(false);
         }
-    };    
+    };
 
     const handleSave = async () => {
         if (!dadosTransacao) {
             alert("Nenhuma transação para salvar.");
             return;
         }
-    
+
         try {
             const saved = await saveTransaction(dadosTransacao, 1);
             setMensagem("Transação salva com sucesso!");
@@ -105,7 +106,7 @@ function AudioTransaction() {
         } catch (error) {
             setMensagem("Erro ao salvar transação.");
         }
-    };    
+    };
 
     const saveTransaction = async (transaction, userId) => {
         try {
@@ -168,7 +169,10 @@ function AudioTransaction() {
             {/* Navbar Simplificada */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>CashFlow - Registro por áudio</h1>
+                    <div style={styles.logoContainer}>
+                        <img src={logo} alt="Logo" style={styles.logoImage} />
+                        <h1 style={styles.logoText}></h1>
+                    </div>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
@@ -277,6 +281,7 @@ const styles = {
         backgroundColor: 'rgba(15, 15, 15, 0.8)',
         backdropFilter: 'blur(10px)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        height: '50px',
     },
     navLeft: {
         display: 'flex',
@@ -473,6 +478,24 @@ const styles = {
             backgroundColor: '#555',
             cursor: 'not-allowed',
         },
+    },
+    logoContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+    },
+    logoImage: {
+        width: '150px',
+        height: '150px',
+        objectFit: 'contain',
+        borderRadius: '50%',
+        filter: 'brightness(0) invert(1)',
+    },
+    logoText: {
+        fontSize: '24px',
+        fontWeight: 'bold',
+        color: '#fff',
+        margin: 0,
     },
 };
 
