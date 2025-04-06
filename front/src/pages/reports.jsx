@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo_CashFlow.svg';
 
 function Reports() {
     const navigate = useNavigate();
@@ -82,7 +83,10 @@ function Reports() {
             {/* Navbar com navItems corrigidos */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>GetNow - Relatórios</h1>
+                <div style={styles.logoContainer}>
+                    <img src={logo} alt="Logo" style={styles.logoImage} />
+                    <h1 style={styles.logo}></h1>
+                </div>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
@@ -261,6 +265,7 @@ const styles = {
         backgroundColor: 'rgba(15, 15, 15, 0.8)',
         backdropFilter: 'blur(10px)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        height:'50px',
     },
     navLeft: {
         display: 'flex',
@@ -427,6 +432,17 @@ const styles = {
     tableCell: {
         padding: '15px',
         color: 'rgba(255, 255, 255, 0.8)',
+    },
+    logoContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+    },
+    logoImage: {
+        height: '150px',
+        width: '150px',
+        objectFit: 'contain',
+        filter:'brightness(0) invert(1)',
     },
 };
 

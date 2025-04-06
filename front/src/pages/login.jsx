@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useEffect } from 'react';
-import { createRoutesFromElements, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 function Login() {
     const [mensagem, setMensagem] = useState('');
@@ -26,12 +26,23 @@ function Login() {
 
     return (
         <div style={styles.container}>
-            <form onSubmit={handleLogin} style={styles.form}>
-                <h2 style={styles.title}>Login</h2>
+            <motion.form 
+                onSubmit={handleLogin} 
+                style={styles.form}
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+            >
+                <motion.h2 style={styles.title} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>Login</motion.h2>
                 {mensagem && (
-                    <div style={mensagemTipo === 'sucesso' ? styles.sucesso : styles.erro}>
+                    <motion.div 
+                        style={mensagemTipo === 'sucesso' ? styles.sucesso : styles.erro}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                    >
                         {mensagem}
-                    </div>
+                    </motion.div>
                 )}
                 <input
                     type="email"
@@ -49,8 +60,15 @@ function Login() {
                     style={styles.input}
                     required
                 />
-                <button type="submit" style={styles.button}>Entrar</button>
-            </form>
+                <motion.button 
+                    type="submit" 
+                    style={styles.button}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    Entrar
+                </motion.button>
+            </motion.form>
         </div>
     );
 }
@@ -98,9 +116,8 @@ const styles = {
         outline: 'none',
         backgroundColor: 'rgba(255, 255, 255, 0.35)',
         color: 'white',
-        transition: 'all 0.3s ease',
+        transition: 'all 0.3s ease-in-out',
     },
-    
     button: {
         padding: '12px',
         fontSize: '16px',
@@ -110,7 +127,7 @@ const styles = {
         borderRadius: '8px',
         cursor: 'pointer',
         fontWeight: 'bold',
-        transition: 'background-color 0.3s ease, transform 0.2s',
+        transition: 'background-color 0.3s ease-in-out, transform 0.2s',
     },
     sucesso: {
         backgroundColor: '#d4edda',
@@ -120,7 +137,7 @@ const styles = {
         textAlign: 'center',
         fontWeight: 'bold',
     },
-      erro: {
+    erro: {
         backgroundColor: '#f8d7da',
         color: '#721c24',
         padding: '10px',

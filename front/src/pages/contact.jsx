@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 function Contact() {
   const [nome, setNome] = useState('');
@@ -18,7 +19,12 @@ function Contact() {
   };
 
   return (
-    <div style={styles.container}>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      style={styles.container}
+    >
       <form onSubmit={handleSubmit} style={styles.form}>
         <h2 style={styles.title}>Entre em Contato</h2>
 
@@ -52,7 +58,7 @@ function Contact() {
 
         {enviado && <p style={styles.sucesso}>Mensagem enviada com sucesso!</p>}
       </form>
-    </div>
+    </motion.div>
   );
 }
 
@@ -125,7 +131,7 @@ const styles = {
     fontWeight: 'bold',
     borderRadius: '8px',
     cursor: 'pointer',
-    transition: '0.3s ease',
+    transition: '0.3s ease-in-out',
     fontFamily: "'Poppins', sans-serif",
   },
   sucesso: {
@@ -137,3 +143,4 @@ const styles = {
 };
 
 export default Contact;
+
