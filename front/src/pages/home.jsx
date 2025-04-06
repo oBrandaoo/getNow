@@ -40,7 +40,7 @@ function Home() {
             {/* Navbar */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>(Logo) Dashboard</h1>
+                    <h1 style={styles.logo}>GetNow - Dashboard</h1>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
@@ -53,7 +53,7 @@ function Home() {
                         ))}
                     </div>
                 </div>
-                <button style={styles.logoutButton} onClick={handleLogout}>Login</button>
+                <button style={styles.logoutButton} onClick={handleLogout}>Sair</button>
             </div>
 
             {/* Conteúdo Principal */}

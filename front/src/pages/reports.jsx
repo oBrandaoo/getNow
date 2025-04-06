@@ -28,7 +28,6 @@ function Reports() {
         navigate(path);
     };
 
-    // Simulação de dados - substitua pela chamada real à API
     useEffect(() => {
         fetchTransactions();
     }, []);
@@ -36,14 +35,12 @@ function Reports() {
     const fetchTransactions = async () => {
         setLoading(true);
         try {
-            // Construa a query string com os filtros
             const params = new URLSearchParams();
             if (filters.startDate) params.append('startDate', filters.startDate);
             if (filters.endDate) params.append('endDate', filters.endDate);
             if (filters.type) params.append('type', filters.type);
             if (filters.status) params.append('status', filters.status);
 
-            // Substitua pela sua chamada API real
             const response = await fetch(`http://localhost:8080/api/transactions?${params.toString()}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -68,7 +65,6 @@ function Reports() {
     };
 
     const handleExport = () => {
-        // Implementar lógica de exportação
         alert('Exportando relatório...');
     };
 
@@ -99,7 +95,7 @@ function Reports() {
                         ))}
                     </div>
                 </div>
-                <button style={styles.logoutButton} onClick={() => navigate('/login')}>Login</button>
+                <button style={styles.logoutButton} onClick={handleLogout}>Sair</button>
             </div>
 
             {/* Conteúdo Principal */}

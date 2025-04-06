@@ -170,7 +170,7 @@ function AudioTransaction() {
             {/* Navbar Simplificada */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>Registro por Áudio</h1>
+                <h1 style={styles.logo}>GetNow - Registro por áudio</h1>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button

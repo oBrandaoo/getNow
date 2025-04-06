@@ -45,11 +45,7 @@ function Products() {
             {/* Navbar */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>
-                        <img src="../../logo.png" alt="Logo GetNow" style={styles.logoImage} />
-                        GetNow - Produtos
-                    </h1>
-
+                    <h1 style={styles.logo}>GetNow - Produtos</h1>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
