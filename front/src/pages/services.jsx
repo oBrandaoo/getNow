@@ -136,7 +136,7 @@ function AudioTransaction() {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const mockData = [
-                    "Transação: Compra de materiais de escritório",
+                    "Transação: Mesa para construção",
                     "Valor: R$ 245,90",
                     "Categoria: Despesas Operacionais",
                     "Fornecedor: Papelaria Central"
