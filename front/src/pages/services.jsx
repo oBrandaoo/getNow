@@ -69,18 +69,19 @@ function AudioTransaction() {
     
             const mockResponse = {
                 amount: 245.90,
+                amountBrute: 200.00,
                 type: "PURCHASE",
-                description: "Compra de materiais de escritório",
+                description: "Mesa para construção",
                 method: "CARD"
             };
     
-            // Salva os dados simulados para uso posterior no save
             setDadosTransacao(mockResponse);
     
             setTranscription([
                 `Transação: ${mockResponse.description}`,
                 `Valor: R$ ${mockResponse.amount.toFixed(2)}`,
-                `Método: ${mockResponse.method}`
+                `Valor Bruto: R$ ${mockResponse.amountBrute.toFixed(2)}`,
+                `Método: ${mockResponse.method === 'CARD' ? 'Cartão de crédito' : mockResponse.method}`
             ].join("\n"));
     
         } catch (error) {
@@ -138,6 +139,7 @@ function AudioTransaction() {
                 const mockData = [
                     "Transação: Mesa para construção",
                     "Valor: R$ 245,90",
+                    "Valor Bruto: R$ 300,00",
                     "Categoria: Despesas Operacionais",
                     "Fornecedor: Papelaria Central"
                 ].join("\n");

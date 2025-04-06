@@ -16,6 +16,7 @@ public class Transaction {
     private Long id;
 
     private BigDecimal amount;     // "valor"
+    private BigDecimal amountBrute;
     private String type;           // e.g., PURCHASE, REFUND, CHARGEBACK
     private String status;         // e.g., PENDING, COMPLETED, FAILED
     private String method;         // e.g., CARD, PIX, CASH

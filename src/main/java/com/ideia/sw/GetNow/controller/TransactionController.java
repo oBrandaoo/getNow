@@ -33,6 +33,7 @@ public class TransactionController {
 
         Transaction mockTransaction = new Transaction();
         mockTransaction.setAmount(new BigDecimal("245.90"));
+        mockTransaction.setAmountBrute(new BigDecimal("200.00"));
         mockTransaction.setType("PURCHASE");
         mockTransaction.setMethod("CARD");
         mockTransaction.setDescription("Compra mockada de materiais de escritório");

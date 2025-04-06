@@ -101,7 +101,7 @@ function Reports() {
             .reduce((sum, t) => sum + t.amount, 0);
 
         if (month === 4) {
-            total = 54.1;
+            total = 45.9;
         }
         return { month: monthName, total };
     });
@@ -111,7 +111,7 @@ function Reports() {
             {/* Navbar */}
             <div style={styles.navbar}>
                 <div style={styles.navLeft}>
-                    <h1 style={styles.logo}>GetNow - Relatórios</h1>
+                    <h1 style={styles.logo}>CashFlow - Relatórios</h1>
                     <div style={styles.navLinks}>
                         {navItems.map((item, index) => (
                             <button
@@ -223,7 +223,8 @@ function Reports() {
                                     <th style={styles.tableHeader}>ID</th>
                                     <th style={styles.tableHeader}>Data</th>
                                     <th style={styles.tableHeader}>Descrição</th>
-                                    <th style={styles.tableHeader}>Valor</th>
+                                    <th style={styles.tableHeader}>Valor Bruto</th>
+                                    <th style={styles.tableHeader}>Valor da venda</th>
                                     <th style={styles.tableHeader}>Tipo</th>
                                     <th style={styles.tableHeader}>Método</th>
                                     <th style={styles.tableHeader}>Status</th>
@@ -235,6 +236,7 @@ function Reports() {
                                         <td style={styles.tableCell}>{transaction.id}</td>
                                         <td style={styles.tableCell}>{formatDate(transaction.createdAt)}</td>
                                         <td style={styles.tableCell}>{transaction.description}</td>
+                                        <td style={styles.tableCell}>{formatCurrency(transaction.amountBrute)}</td>
                                         <td style={styles.tableCell}>{formatCurrency(transaction.amount)}</td>
                                         <td style={styles.tableCell}>
                                             {transaction.type === 'SERVICE_PAYMENT' && 'Pagamento Serviço'}
@@ -461,6 +463,7 @@ const styles = {
     tableCell: {
         padding: '15px',
         color: 'rgba(255, 255, 255, 0.8)',
+        textAlign: '',
     },
 };
 
