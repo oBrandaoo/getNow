@@ -1,6 +1,5 @@
 package com.ideia.sw.GetNow.controller;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +38,6 @@ public class TransactionController {
         System.out.println(
                 "Arquivo recebido: " + audioFile.getOriginalFilename() + " (" + audioFile.getSize() + " bytes)");
 
-        // Simulação de processamento
         Map<String, String> mockResponse = new HashMap<>();
         mockResponse.put("amount", "245.90");
         mockResponse.put("type", "PURCHASE");
