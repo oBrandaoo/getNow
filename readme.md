@@ -12,3 +12,6 @@ npm run dev
 
 # Queries para teste em prod
 INSERT INTO users (id, name, email, password) VALUES (1, 'Usuário Teste', 'teste@teste.com', 'senha123');
+
+# Banco em memória
+http://localhost:8080/h2-console/login.do?jsessionid=006cc0dd42187b099136864763d46310
