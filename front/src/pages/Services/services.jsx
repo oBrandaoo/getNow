@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo_CashFlow.svg';
+import logo from '../../assets/logo_CashFlow.svg';
 
 function AudioTransaction() {
     const navigate = useNavigate();

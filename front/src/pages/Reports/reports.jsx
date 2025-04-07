@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { data, useNavigate } from 'react-router-dom';
-import logo from '../assets/logo_CashFlow.svg';
+import logo from '../../assets/logo_CashFlow.svg';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 function Reports() {
