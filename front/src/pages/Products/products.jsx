@@ -14,15 +14,7 @@ function Products() {
         { id: 5, name: 'Fone Bluetooth', category: 'Acessórios', price: 349.90, stock: 35, sku: 'ACES345' },
         { id: 6, name: 'Mouse Sem Fio', category: 'Acessórios', price: 149.90, stock: 42, sku: 'ACES678' },
     ]);
-
-    const handleLogout = () => {
-        navigate('/login');
-    };
-
-    const handleNavClick = (path) => {
-        navigate(path);
-    };
-
+    
     const handleAddProduct = () => {
         navigate('/products/new');
     };
