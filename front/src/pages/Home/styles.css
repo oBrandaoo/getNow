@@ -1,141 +1,140 @@
 .container {
-    height: 90vh;
-    width: 100vw;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    font-family: Arial, sans-serif;
-    color: #f0f0f0;
-    overflow-x: hidden;
-  }
-  
-  .main-content {
-    padding: 30px 40px;
-    position: relative;
-  }
-  
-  .metrics-section {
-    margin-bottom: 40px;
-  }
-  
-  .section-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #ffffff;
-  }
-  
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-  }
-  
-  .metric-card {
-    background-color: rgba(30, 30, 30, 0.6);
-    border-radius: 12px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    transition: all 0.3s ease;
-  }
-  
-  .metric-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  }
-  
-  .metric-icon {
-    font-size: 28px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(58, 123, 213, 0.2);
-  }
-  
-  .metric-info {
-    flex: 1;
-  }
-  
-  .metric-label {
-    font-size: 16px;
-    margin: 0 0 5px 0;
-    color: rgba(255, 255, 255, 0.8);
-  }
-  
-  .metric-value {
-    font-size: 24px;
-    margin: 0;
-    font-weight: bold;
-    color: #ffffff;
-  }
-  
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 20px;
-  }
-  
-  .activity-card,
-  .chart-card {
-    background-color: rgba(30, 30, 30, 0.6);
-    border-radius: 12px;
-    padding: 20px;
-  }
-  
-  .card-title {
-    font-size: 18px;
-    margin: 0 0 20px 0;
-    color: #ffffff;
-  }
-  
-  .activity-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .activity-item {
-    padding: 15px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .activity-content {
-    flex: 1;
-  }
-  
-  .activity-action {
-    margin: 0 0 5px 0;
-    font-size: 14px;
-  }
-  
-  .activity-time {
-    margin: 0;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
-  }
-  
-  .activity-value {
-    background-color: rgba(58, 123, 213, 0.2);
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 14px;
-  }
-  
-  .chart-placeholder {
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-  }
-  
-  .chart-text {
-    color: rgba(255, 255, 255, 0.5);
-  }
-  
+  height: 90vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  font-family: Arial, sans-serif;
+  color: #f0f0f0;
+  overflow-x: hidden;
+}
+
+.main-content {
+  padding: 30px 40px;
+  position: relative;
+}
+
+.metrics-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.metric-card {
+  background-color: rgba(30, 30, 30, 0.6);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.metric-icon {
+  font-size: 28px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(58, 123, 213, 0.2);
+}
+
+.metric-info {
+  flex: 1;
+}
+
+.metric-label {
+  font-size: 16px;
+  margin: 0 0 5px 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.metric-value {
+  font-size: 24px;
+  margin: 0;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+}
+
+.activity-card,
+.chart-card {
+  background-color: rgba(30, 30, 30, 0.6);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+  color: #ffffff;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-item {
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-action {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+}
+
+.activity-time {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.activity-value {
+  background-color: rgba(58, 123, 213, 0.2);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.chart-placeholder {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.chart-text {
+  color: rgba(255, 255, 255, 0.5);
+}
