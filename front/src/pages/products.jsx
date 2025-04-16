@@ -4,15 +4,22 @@ import logo from '../assets/logo_CashFlow.svg';
 
 function Products() {
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [newProduct, setNewProduct] = useState({
+        name: '',
+        description: '',
+        price: '',
+        stock: '',
+    });
     const [searchTerm, setSearchTerm] = useState('');
 
     const [products, setProducts] = useState([
-        { id: 1, name: 'Smartphone Premium', category: 'Eletrônicos', price: 2999.90, stock: 15, sku: 'ELET123' },
-        { id: 2, name: 'Notebook Pro', category: 'Eletrônicos', price: 5499.00, stock: 8, sku: 'ELET456' },
-        { id: 3, name: 'Mesa de Escritório', category: 'Móveis', price: 899.90, stock: 22, sku: 'MOV789' },
-        { id: 4, name: 'Cadeira Ergonômica', category: 'Móveis', price: 1299.00, stock: 10, sku: 'MOV012' },
-        { id: 5, name: 'Fone Bluetooth', category: 'Acessórios', price: 349.90, stock: 35, sku: 'ACES345' },
-        { id: 6, name: 'Mouse Sem Fio', category: 'Acessórios', price: 149.90, stock: 42, sku: 'ACES678' },
+        { id: 1, name: 'Smartphone Premium', category: 'Eletrônicos', price: 2999.90, stock: 15 },
+        { id: 2, name: 'Notebook Pro', category: 'Eletrônicos', price: 5499.00, stock: 8 },
+        { id: 3, name: 'Mesa de Escritório', category: 'Móveis', price: 899.90, stock: 22 },
+        { id: 4, name: 'Cadeira Ergonômica', category: 'Móveis', price: 1299.00, stock: 10 },
+        { id: 5, name: 'Fone Bluetooth', category: 'Acessórios', price: 349.90, stock: 35 },
+        { id: 6, name: 'Mouse Sem Fio', category: 'Acessórios', price: 149.90, stock: 42 },
     ]);
 
     const navItems = [
@@ -27,19 +34,36 @@ function Products() {
         navigate('/login');
     };
 
-    const handleNavClick = (path) => {
-        navigate(path);
-    };
-
-    const handleAddProduct = () => {
-        navigate('/products/new');
-    };
-
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.sku.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handleSaveProduct = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newProduct),
+            });
+
+            if (response.ok) {
+                const savedProduct = await response.json();
+                setProducts(prev => [...prev, savedProduct]);
+                setShowModal(false);
+                setNewProduct({ name: '', description: '', price: '', stock: '' });
+                navigate("/products");
+            } else {
+                alert('Erro ao salvar o produto');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Erro ao conectar com o servidor');
+        }
+    };
 
     return (
         <div style={styles.container}>
@@ -67,6 +91,31 @@ function Products() {
                 </div>
                 <button style={styles.logoutButton} onClick={handleLogout}>Sair</button>
             </div>
+            {showModal && (
+                <div style={styles.modalOverlay}>
+                    <div style={styles.modalContent}>
+                        <h2 style={{ marginBottom: '10px' }}>Adicionar Produto</h2>
+                        <input type="text" placeholder="Nome" style={styles.modalInput} value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                        <input type="text" placeholder="Descrição" style={styles.modalInput} value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                        <input type="number" placeholder="Preço" style={styles.modalInput} value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: parseFloat(e.target.value) })} />
+                        <input type="number" placeholder="Estoque" style={styles.modalInput} value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: parseInt(e.target.value) })} />
+                        <div style={styles.modalButtonRow}>
+                            <button
+                                style={{ ...styles.modalButton, ...styles.modalSaveButton }}
+                                onClick={handleSaveProduct}
+                            >
+                                Salvar
+                            </button>
+                            <button
+                                style={{ ...styles.modalButton, ...styles.modalCancelButton }}
+                                onClick={() => setShowModal(false)}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Conteúdo Principal */}
             <main style={styles.mainContent}>
@@ -82,7 +131,7 @@ function Products() {
                         />
                         <button style={styles.searchButton}>🔍</button>
                     </div>
-                    <button style={styles.addButton} onClick={handleAddProduct}>
+                    <button style={styles.addButton} onClick={() => setShowModal(true)}>
                         + Adicionar Produto
                     </button>
                 </div>
@@ -94,10 +143,9 @@ function Products() {
                             <tr style={styles.tableHeaderRow}>
                                 <th style={styles.tableHeader}>ID</th>
                                 <th style={styles.tableHeader}>Nome</th>
-                                <th style={styles.tableHeader}>Categoria</th>
+                                <th style={styles.tableHeader}>Descrição</th>
                                 <th style={styles.tableHeader}>Preço</th>
                                 <th style={styles.tableHeader}>Estoque</th>
-                                <th style={styles.tableHeader}>SKU</th>
                                 <th style={styles.tableHeader}>Ações</th>
                             </tr>
                         </thead>
@@ -106,7 +154,7 @@ function Products() {
                                 <tr key={product.id} style={styles.tableRow}>
                                     <td style={styles.tableCell}>{product.id}</td>
                                     <td style={styles.tableCell}>{product.name}</td>
-                                    <td style={styles.tableCell}>{product.category}</td>
+                                    <td style={styles.tableCell}>{product.description}</td>
                                     <td style={styles.tableCell}>
                                         {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                     </td>
@@ -116,7 +164,6 @@ function Products() {
                                     }}>
                                         {product.stock}
                                     </td>
-                                    <td style={styles.tableCell}>{product.sku}</td>
                                     <td style={styles.tableCell}>
                                         <button style={styles.actionButton}>Editar</button>
                                         <button style={{ ...styles.actionButton, ...styles.deleteButton }}>Excluir</button>
@@ -337,6 +384,66 @@ const styles = {
         color: '#fff',
         margin: 0,
     },
+    modalOverlay: {
+        position: 'fixed',
+        top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 999,
+    },
+    modalContent: {
+        backgroundColor: '#2c2c2c',
+        padding: '30px',
+        borderRadius: '16px',
+        width: '100%',
+        maxWidth: '450px',
+        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '15px',
+        color: '#fff',
+        animation: 'fadeIn 0.3s ease-in-out',
+    },
+    
+    // Adicione isso no mesmo objeto de styles:
+    modalInput: {
+        padding: '12px 15px',
+        borderRadius: '8px',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        backgroundColor: '#1a1a1a',
+        color: '#fff',
+        fontSize: '14px',
+        outline: 'none',
+        transition: 'border 0.3s ease',
+    },
+    modalInputFocus: {
+        border: '1px solid #3a7bd5',
+    },
+    modalButtonRow: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        gap: '10px',
+        marginTop: '10px',
+    },
+    modalButton: {
+        padding: '10px 16px',
+        borderRadius: '8px',
+        border: 'none',
+        cursor: 'pointer',
+        fontWeight: 'bold',
+        transition: 'background-color 0.3s ease',
+    },
+    modalSaveButton: {
+        backgroundColor: '#00c9a7',
+        color: '#fff',
+    },
+    modalCancelButton: {
+        backgroundColor: '#555',
+        color: '#fff',
+    },
+    
 };
 
 export default Products;
